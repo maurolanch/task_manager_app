@@ -40,3 +40,14 @@ def get_next_id():
     except (FileNotFoundError, ValueError):
         return 1
     
+
+def write_task_into_csv(
+        task: TaskWithID
+):
+    with open(DATABASE_FILENAME, mode="a", newline="") as file:
+        writer = csv.DictWriter(
+            file,
+            fieldnames=colunn_fields
+        )
+        writer.writerow(task.model_dump())
+
