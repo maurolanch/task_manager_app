@@ -25,3 +25,18 @@ def read_task(task_id: int) -> Optional[TaskWithID]:
         for row in reader:
             if int(row["id"]) == task_id:
                 return TaskWithID(**row)
+            
+
+def get_next_id():
+    try:
+        with open(DATABASE_FILENAME, "r") as csvfile:
+            reader = csv.DictReader(
+                csvfile
+            )
+            max_id = max(
+                int(row["id"]) for row in reader
+            )
+            return max_id + 1
+    except (FileNotFoundError, ValueError):
+        return 1
+    
