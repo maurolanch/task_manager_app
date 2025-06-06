@@ -8,7 +8,8 @@ from operations import (
     read_all_tasks,
     read_task,
     create_task,
-    modify_task
+    modify_task, 
+    remove_task
 )
 
 app = FastAPI
@@ -47,3 +48,14 @@ def update_task(
             detail="task not found"
         )
     return modified
+
+
+@app.delete("/task/{task_id}")
+def delete_task(task_id: int):
+    removed_task = remove_task(task_id)
+    if not removed_task:
+        raise HTTPException(
+            status_code=404,
+            detail="task not found"
+        )
+    return removed_task
