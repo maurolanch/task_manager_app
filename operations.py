@@ -11,10 +11,11 @@ column_fields = [
 
 def read_all_tasks() -> list[TaskWithID]:
     with open(DATABASE_FILENAME) as csvfile:
-        reader = csv.DictReader(
-            csvfile
-        )
-        return [TaskWithID(**row) for row in reader]
+        reader = csv.DictReader(csvfile)
+        return [
+            TaskWithID(**row) for row in reader
+        ]
+
     
 
 def read_task(task_id: int) -> Optional[TaskWithID]:
@@ -71,7 +72,7 @@ def modify_task(
     tasks = read_all_tasks()
     for number, task_ in enumerate(tasks):
         if task_.id == id:
-            task[number] = (
+            tasks[number] = (
                 updated_task
             ) = task_.model_copy(update=task)
 
@@ -90,7 +91,7 @@ def modify_task(
     
 def remove_task(id: int) -> bool:
     deleted_task: Optional[Task] = None
-    tasks = read_all_tasks
+    tasks = read_all_tasks()
     with open(
         DATABASE_FILENAME, mode="w", newline=""
     )as csvfile:

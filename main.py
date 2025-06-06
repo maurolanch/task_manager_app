@@ -12,10 +12,10 @@ from operations import (
     remove_task
 )
 
-app = FastAPI
+app = FastAPI()
 
 
-@app.get("/tasks", response_class=list[TaskWithID])
+@app.get("/tasks", response_model=list[TaskWithID])
 def get_tasks():
     tasks = read_all_tasks()
     return tasks
@@ -30,11 +30,11 @@ def get_task(task_id: int):
         )
     return task
 
-@app.post("/task", response_class=TaskWithID)
+@app.post("/task", response_model=TaskWithID)
 def add_task(task: Task):
     return create_task(task)
 
-@app.put("/task/{task_id}", response_class=TaskWithID)
+@app.put("/task/{task_id}", response_model=TaskWithID)
 def update_task(
     task_id: int, task_update: UpdateTask
 ):
