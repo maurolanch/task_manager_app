@@ -18,3 +18,13 @@ def get_tasks():
     tasks = read_all_tasks()
     return tasks
 
+@app.get("/task/{task_id}")
+def get_task(task_id: int):
+    task = read_task(task_id)
+    if not task:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+    return task
+
