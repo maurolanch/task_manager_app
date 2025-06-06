@@ -28,3 +28,7 @@ def get_task(task_id: int):
         )
     return task
 
+@app.post("/task", response_class=TaskWithID)
+def add_task(task: Task):
+    return create_task(task)
+
