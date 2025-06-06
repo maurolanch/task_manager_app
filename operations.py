@@ -5,7 +5,7 @@ from models import Task, TaskWithID
 DATABASE_FILENAME = "tasks.csv"
 
 
-colunn_fields = [
+column_fields = [
     "id", "title", "description", "status"
 ]
 
@@ -47,7 +47,7 @@ def write_task_into_csv(
     with open(DATABASE_FILENAME, mode="a", newline="") as file:
         writer = csv.DictWriter(
             file,
-            fieldnames=colunn_fields
+            fieldnames=column_fields
         )
         writer.writerow(task.model_dump())
 
@@ -64,4 +64,26 @@ def create_task(
     return task_with_id
 
 
+def modify_task(
+        id: int, task: dict
+) -> Optional[TaskWithID]:
+    updated_task: Optional[TaskWithID] = None
+    tasks = read_all_tasks()
+    for number, task_ in enumerate(tasks):
+        if task_.id == id:
+            task[number] = (
+                updated_task
+            ) = task_.model_copy(update=task)
 
+    with open(
+        DATABASE_FILENAME, mode="w", newline=""
+    ) as csvfile:
+        writer = csv.DictWriter(
+            csvfile,
+            fieldnames=column_fields
+        )
+        writer.writeheader()
+        for task in tasks:
+            writer.writerow(task.model_dump())
+    if updated_task:
+        return updated_task
