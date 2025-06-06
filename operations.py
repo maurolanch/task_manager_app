@@ -51,3 +51,17 @@ def write_task_into_csv(
         )
         writer.writerow(task.model_dump())
 
+
+
+def create_task(
+        task: Task
+) -> TaskWithID:
+    id = get_next_id()
+    task_with_id = TaskWithID(
+        id=id, **task.model_dump()
+    )
+    write_task_into_csv(task_with_id)
+    return task_with_id
+
+
+
