@@ -87,3 +87,26 @@ def modify_task(
             writer.writerow(task.model_dump())
     if updated_task:
         return updated_task
+    
+def remove_task(id: int) -> bool:
+    deleted_task: Optional[Task] = None
+    tasks = read_all_tasks
+    with open(
+        DATABASE_FILENAME, mode="w", newline=""
+    )as csvfile:
+        writer = csv.DictWriter(
+            csvfile,
+            fieldnames=column_fields
+        )
+        writer.writeheader()
+        for task in tasks:
+            if task.id == id:
+                deleted_task = task
+                continue
+            writer.writerow(task.model_dump())
+    if deleted_task:
+        dict_task_without_id = (
+            deleted_task.model_dump()
+        )
+        del dict_task_without_id["id"]
+        return Task(**dict_task_without_id)
