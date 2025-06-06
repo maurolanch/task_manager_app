@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from models import (
     Task, 
-    TaskWithID
+    TaskWithID,
+    UpdateTask
 )
 from operations import (
     read_all_tasks,
@@ -32,3 +33,17 @@ def get_task(task_id: int):
 def add_task(task: Task):
     return create_task(task)
 
+@app.put("/task/{task_id}", response_class=TaskWithID)
+def update_task(
+    task_id: int, task_update: UpdateTask
+):
+    modified = modify_task(
+        task_id, 
+        task_update.model_dump(exclude_unset=True)
+    )
+    if not modified:
+        raise HTTPException(
+            status_code=404,
+            detail="task not found"
+        )
+    return modified
